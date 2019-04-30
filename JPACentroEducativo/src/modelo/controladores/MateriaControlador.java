@@ -3,6 +3,10 @@ package modelo.controladores;
 
 
 import modelo.Materia;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import modelo.Entidad;
 
 public class MateriaControlador extends Controlador {
@@ -57,7 +61,16 @@ public class MateriaControlador extends Controlador {
 	}
 	
 	
-
+	/**
+	 * 
+	 */
+	public List<Materia> findAllMateria() {
+		List<Materia> resultado = new ArrayList<Materia>();
+		for (Entidad entidad : super.findAll()) {
+			resultado.add((Materia) entidad);
+		}
+		return resultado;
+	}
 
 	
 //	public static String toString (Curso curso) {

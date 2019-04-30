@@ -90,6 +90,24 @@ public class Menu extends JMenuBar {
 		});
 		menuArchivo.add(miProfesor);
 		
+		JMenuItem miValoracionMaterias = new JMenuItem ("Valoraciones Materias");
+		miValoracionMaterias.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JDialog dialogo = new JDialog() ;
+				dialogo.setResizable(false);
+				dialogo.setTitle("Valoracion Materias");
+				dialogo.setBounds(100, 100, 1000, 600);
+				
+				dialogo.setContentPane(new PanelGestionValoracionMaterias());
+				dialogo.setModal(true);
+				dialogo.setVisible(true);
+				
+			}
+		});
+		menuArchivo.add(miValoracionMaterias);
+		
 		
 		this.add(menuArchivo);
 	}

@@ -145,21 +145,21 @@ public class PanelGestionEstudiante extends JPanel{
 		nuevoRegistro.setEmail(panel.getJtfEmail().getText());
 		nuevoRegistro.setTelefono(panel.getJtfTelefono().getText());
 		nuevoRegistro.setTipologiaSexo((TipologiaSexo) panel.getJcbSexo().getSelectedItem());
-	//	nuevoRegistro.setColor(panel.getJtfColor().getText());
+		nuevoRegistro.setColor(panel.getJtfColor().getText());
 		byte[] imagenAMostrar = null;
-		if (panel.getFichero()!=null) {
-			try {
+		try {
+			if(panel.getFichero()!=null) {
 				imagenAMostrar = Files.readAllBytes(panel.getFichero().toPath());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				nuevoRegistro.setImagen(imagenAMostrar);
+				panel.getJspImagen().setViewportView(new JLabel(new ImageIcon(imagenAMostrar)));
 			}
-			nuevoRegistro.setImagen(imagenAMostrar);
-			panel.getJspImagen().setViewportView(new JLabel(new ImageIcon(imagenAMostrar)));
-		} else {
-			nuevoRegistro.setImagen(actual.getImagen());
+			else {
+				nuevoRegistro.setImagen(actual.getImagen());
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
 		if (nuevoRegistro.getId() == 0) {
 			EstudianteControlador.getControlador().persist(nuevoRegistro);
 		}
@@ -255,7 +255,7 @@ public class PanelGestionEstudiante extends JPanel{
 			panel.getJtfDireccion().setText(this.actual.getDireccion());
 			panel.getJtfEmail().setText(this.actual.getEmail());
 			panel.getJtfTelefono().setText(this.actual.getTelefono());
-//			panel.getJtfColor().setText(this.actual.getColor());
+			panel.getJtfColor().setText(this.actual.getColor());
 			//Cargo JComboBox
 			for (int i = 0; i < panel.getJcbSexo().getItemCount(); i++) {
 				if (actual.getTipologiaSexo().getId() == panel.getJcbSexo().getItemAt(i).getId()) {
@@ -263,7 +263,7 @@ public class PanelGestionEstudiante extends JPanel{
 					break;
 				}
 			}
-//			panel.setBackground(Color.decode("#" + panel.getJtfColor().getText()));
+			panel.setBackground(Color.decode(panel.getJtfColor().getText()));
 			cargaImagen();
 		}
 	}

@@ -20,9 +20,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
+import com.sun.codemodel.JCatchBlock;
+
 import gui.utils.CacheImagenes;
 import modelo.Curso;
 import modelo.Materia;
+import modelo.Profesor;
 import modelo.controladores.CursoControlador;
 import modelo.controladores.MateriaControlador;
 
@@ -53,7 +56,10 @@ public class PanelGestionMateria extends JPanel {
 	JTextField jtfId = new JTextField(5);
 	JTextField jtfNombre = new JTextField(40);
 	JTextField jtfAcrónimo = new JTextField(40);
+	JButton refrescar = new JButton("Refrescar alumnado");
+	JButton guardar = new JButton("Guardar notas");
 	JComboBox<Curso> jcbMateria = new JComboBox<Curso>();
+
 	private Dimension minimaDimensionJTextField = new Dimension (150, 20);
 	
 	
@@ -115,7 +121,7 @@ public class PanelGestionMateria extends JPanel {
 			
 			c.gridx = 1;
 		    jtfId.setMinimumSize(minimaDimensionJTextField);
-		    inicializaComboBoxFabricante();
+		    inicializaComboBoxCursos();
 		    c.anchor = GridBagConstraints.WEST;
 		    panelGestion.add(jcbMateria, c);
 		    
@@ -125,10 +131,10 @@ public class PanelGestionMateria extends JPanel {
 	/**
 	 * 
 	 */
-	private void inicializaComboBoxFabricante () {
+	private void inicializaComboBoxCursos () {
 		List<Curso> cursos = CursoControlador.getControlador().findAllTipologiaSexo();
-		for (Curso curso : cursos) {
-			jcbMateria.addItem(curso);
+		for (Curso curo : cursos) {
+			jcbMateria.addItem(curo);
 		}
 	}
 	

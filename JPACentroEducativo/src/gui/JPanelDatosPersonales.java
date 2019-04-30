@@ -8,6 +8,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import javax.swing.JTextField;
+import javax.swing.JViewport;
+
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,12 +33,17 @@ import modelo.controladores.TipologiaSexoControlador;
 
 import javax.swing.JRadioButton;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
+import javax.swing.JPopupMenu;
+import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class JPanelDatosPersonales extends JPanel {
 	private JTextField jtfNombre;
@@ -57,10 +64,12 @@ public class JPanelDatosPersonales extends JPanel {
 	JPanel jpPanelParaColorear = new JPanel();
 	byte[] imagenAMostrar ;
 	private JLabel lblColor;
-	private JTextField textField;
-	File fichero;
 	int seleccionUsuario;
+    ImageIcon icono;
+    File fichero;
 	String Default = new String("");
+	private JPopupMenu popupMenu;
+	private byte[] imagen;
 	
 
 	
@@ -259,11 +268,11 @@ public class JPanelDatosPersonales extends JPanel {
 		jspImagen = new JScrollPane();
 		GridBagConstraints gbc_jspImagen = new GridBagConstraints();
 		gbc_jspImagen.insets = new Insets(0, 0, 5, 0);
-		//gbc_jspImagen.fill = GridBagConstraints.BOTH;
 		gbc_jspImagen.gridx = 2;
 		gbc_jspImagen.gridy = 0;
 		jspImagen.setPreferredSize(new Dimension(100,100));
-		add(jspImagen, gbc_jspImagen);
+		
+		
 		
 		lblColor = new JLabel("Color:");
 		GridBagConstraints gbc_lblColor = new GridBagConstraints();
@@ -273,15 +282,19 @@ public class JPanelDatosPersonales extends JPanel {
 		gbc_lblColor.gridy = 9;
 		add(lblColor, gbc_lblColor);
 		
-		textField = new JTextField();
+		jtfColor = new JTextField();
 		GridBagConstraints gbc_textField = new GridBagConstraints();
 		gbc_textField.anchor = GridBagConstraints.WEST;
 		gbc_textField.insets = new Insets(0, 0, 0, 5);
 		gbc_textField.gridx = 1;
 		gbc_textField.gridy = 9;
-		add(textField, gbc_textField);
-		textField.setColumns(10);
+		add(jtfColor, gbc_textField);
+		jtfColor.setColumns(10);
 		
+		
+		popupMenu = getPopUpMenu();
+		addPopup(jspImagen, popupMenu);
+		add(jspImagen, gbc_jspImagen);
 
 	}
 	
@@ -294,6 +307,67 @@ public class JPanelDatosPersonales extends JPanel {
 			getJcbSexo().addItem(fabricante);
 		}
 	}
+	
+	
+	
+	private void popUp () {
+		// Evento para mostrar el men� en las coordenadas que correspondan
+				this.addMouseListener(new MouseAdapter() {
+		 
+		            @Override
+		            public void mousePressed(MouseEvent e) {
+		                showPopup(e);
+		            }
+		 
+		            @Override
+		            public void mouseReleased(MouseEvent e) {
+		                showPopup(e);
+		            }
+		 
+		            /**
+		             * M�todo llamado cuando se detecta el evento de rat�n, mostrar� el men�
+		             * @param e
+		             */
+		            private void showPopup(MouseEvent e) {
+		                if (e.isPopupTrigger()) {
+		                    popupMenu.show(e.getComponent(),
+		                            e.getX(), e.getY());
+		                }
+		            }
+		        });
+			}
+			
+	
+	private JMenuItem crearNuevoMenuItem (String titulo) {
+       JMenuItem item = new JMenuItem(titulo);
+       item.addActionListener(new ActionListener(){
+           @Override
+           public void actionPerformed(ActionEvent e) {
+               seleccionaImagen();
+           }
+       });
+       
+       return item;
+	}
+	
+/**
+ * 
+ * @return
+ */
+private JPopupMenu getPopUpMenu () {
+	JPopupMenu menu = new JPopupMenu();
+			
+	JMenuItem tamaño = new JMenuItem("Su imagen es de "+   " x " + " de tamaño.");
+	
+	menu.add(tamaño);
+	menu.addSeparator();
+	menu.add(crearNuevoMenuItem("Cambiar de imagen"));
+	
+	return menu;
+}
+
+	
+	
 	
 	private void color () {
 		// Funcionalidad al bot�n
@@ -346,31 +420,8 @@ public class JPanelDatosPersonales extends JPanel {
 		int seleccionUsuario = jfileChooser.showOpenDialog(null);
 		
 		if (seleccionUsuario == JFileChooser.APPROVE_OPTION) {
-			File fichero = this.jfileChooser.getSelectedFile();
+			 fichero = this.jfileChooser.getSelectedFile();
 			
-			// Vuelco el nombre del fichero sobre el JTextField
-			this.jtfNombre.setText(fichero.getAbsolutePath());
-			
-//			if (fichero.isFile()) {
-//				try {
-//					FileReader fileReader = new FileReader(fichero);
-//					BufferedReader bufferedReader = new BufferedReader(fileReader);
-//			
-//					StringBuffer sb = new StringBuffer();
-//					String lineaDelFichero;
-//			
-//					// Lectura del fichero l�nea a l�nea
-//					while ((lineaDelFichero = bufferedReader.readLine()) != null) {
-//						sb.append(lineaDelFichero + "\n");
-//					}
-//					
-//					// Volcamos el contenido del fichero al JTextArea
-//					this.jtaContenidoFichero.setText(sb.toString());
-//				}
-//				catch (Exception ex) {
-//					ex.printStackTrace();
-//				}
-//			}
 			
 			byte[] imagenAMostrar = null;
 			try {
@@ -379,9 +430,8 @@ public class JPanelDatosPersonales extends JPanel {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			ImageIcon icono = new ImageIcon(imagenAMostrar);
+			icono = new ImageIcon(imagenAMostrar);
 			JLabel lblImagen = new JLabel (icono);
-			
 			
 			this.getJspImagen().setViewportView(lblImagen);
 		}
@@ -396,8 +446,8 @@ public class JPanelDatosPersonales extends JPanel {
 		// Si el usuario pulsa sobre aceptar, el color elegido no ser� nulo
 		if (color != null) {
 			String strColor = ""+ Integer.toHexString(color.getRGB()).substring(2);
-			jtfColor.setText(strColor);
-			this.setBackground(Color.decode("#"+ jtfColor.getText()));
+			jtfColor.setText("#"+ strColor);
+			this.setBackground(Color.decode(getJtfColor().getText()));
 		} 
 	}
 	
@@ -421,13 +471,7 @@ public class JPanelDatosPersonales extends JPanel {
 			this.seleccionUsuario = seleccionUsuario;
 		}
 
-	public File getFichero() {
-			return fichero;
-		}
 
-		public void setFichero(File fichero) {
-			this.fichero = fichero;
-		}
 
 	public JTextField getJtfColor() {
 			return jtfColor;
@@ -463,6 +507,21 @@ public class JPanelDatosPersonales extends JPanel {
 
 	public JTextField getJtfTelefono() {
 		return jtfTelefono;
+	}
+
+	public byte[] getImagen() {
+		return imagen;
+	}
+
+	public void setImagen(byte[] imagen) {
+		this.imagen = imagen;
+		if ( imagen != null && imagen.length>0) {
+		ImageIcon icono = new ImageIcon(this.imagen);
+		JLabel lblIcono = new JLabel(icono);
+		this.jspImagen.setViewportView(lblIcono);
+		}
+		
+		
 	}
 
 	public void setJtfNombre(JTextField jtfNombre) {
@@ -516,11 +575,38 @@ public class JPanelDatosPersonales extends JPanel {
 		this.jspImagen = jspImagen;
 	}
 	
-
-	
-	
-	
 	
 	
 
+	
+	
+	
+	
+	
+
+	public File getFichero() {
+		return fichero;
+	}
+
+	public void setFichero(File fichero) {
+		this.fichero = fichero;
+	}
+
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
+	}
 }

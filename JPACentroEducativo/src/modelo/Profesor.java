@@ -45,7 +45,7 @@ public class Profesor extends Entidad implements Serializable {
 
 	//bi-directional many-to-one association to ValoracionMateria
 	@OneToMany(mappedBy="profesor")
-	private List<ValoracionMateria> valoracionmaterias;
+	private List<ValoracionMateria> ValoracionMaterias;
 
 	public Profesor() {
 	}
@@ -138,26 +138,26 @@ public class Profesor extends Entidad implements Serializable {
 		this.TipologiaSexo = TipologiaSexo;
 	}
 
-	public List<ValoracionMateria> getValoracionmaterias() {
-		return this.valoracionmaterias;
+	public List<ValoracionMateria> getValoracionMaterias() {
+		return this.ValoracionMaterias;
 	}
 
-	public void setValoracionmaterias(List<ValoracionMateria> valoracionmaterias) {
-		this.valoracionmaterias = valoracionmaterias;
+	public void setValoracionMaterias(List<ValoracionMateria> ValoracionMaterias) {
+		this.ValoracionMaterias = ValoracionMaterias;
 	}
 
-	public ValoracionMateria addValoracionmateria(ValoracionMateria valoracionmateria) {
-		getValoracionmaterias().add(valoracionmateria);
-		valoracionmateria.setProfesor(this);
+	public ValoracionMateria addValoracionMateria(ValoracionMateria ValoracionMateria) {
+		getValoracionMaterias().add(ValoracionMateria);
+		ValoracionMateria.setProfesor(this);
 
-		return valoracionmateria;
+		return ValoracionMateria;
 	}
 
-	public ValoracionMateria removeValoracionmateria(ValoracionMateria valoracionmateria) {
-		getValoracionmaterias().remove(valoracionmateria);
-		valoracionmateria.setProfesor(null);
+	public ValoracionMateria removeValoracionMateria(ValoracionMateria ValoracionMateria) {
+		getValoracionMaterias().remove(ValoracionMateria);
+		ValoracionMateria.setProfesor(null);
 
-		return valoracionmateria;
+		return ValoracionMateria;
 	}
 
 }
